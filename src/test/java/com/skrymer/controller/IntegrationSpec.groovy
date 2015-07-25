@@ -36,7 +36,6 @@ class IntegrationSpec extends Specification {
     MockMvc mockMvc
 
     def setup() {
-        //Create a mockmvc that prints incoming requests and responses
         this.mockMvc = webAppContextSetup(this.wac)
                 .alwaysDo(print())
                 .build();
