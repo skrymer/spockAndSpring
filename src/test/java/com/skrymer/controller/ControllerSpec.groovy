@@ -29,20 +29,25 @@ class ControllerSpec extends Specification {
 
     def 'create a person named Sonni'() {
 
-        when: "Creating a person named Sonni"
+        when: "Creating a person named Sonni aged 42"
         def response = mockMvc.perform(post('/person')
                 .contentType(APPLICATION_JSON)
-                .content('{"name":"Sonni", "age":42}')
-        )
+                .content('{"name":"Sonni", "age":42}'))
 
-        then: "delegate to person service"
+        then: "delegate creation to PersonService"
         1 * personService.createPerson(
-                { Person p -> p.name == 'Sonni' && p.age == 32 }
+                { Person p -> p.name == 'Sonni' && p.age == 42 }
         )
 
         and: "respond with 200"
         response
                 .andExpect(status().isOk());
     }
+
+    // TODO TEST validation errors
+
+    // TODO TEST exception handling
+
+
 
 }

@@ -3,7 +3,7 @@ package com.skrymer.service;
 import com.skrymer.model.Person;
 
 public interface PersonService {
-    public Person createPerson(Person person);
+    public void createPerson(Person person);
 
     public Person getPerson(String name);
 

@@ -22,10 +22,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person createPerson(Person person) {
+    public void createPerson(Person person) {
         mongo.insert(person);
-
-        return mongo.findOne(query(where("name").is(person.getName())), Person.class);
     }
 
     @Override

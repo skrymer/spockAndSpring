@@ -41,16 +41,20 @@ class IntegrationSpec extends Specification {
                 .build();
     }
 
+    def cleanup() {
+        mongo.remove(query(where('name').is('Sonni')), Person.class);
+    }
+
     def 'post'() {
-        when: "creating a person named Sonni"
+        when: "creating a person named Sonni aged 32"
         def response =
                 mockMvc.perform(post('/person')
                         .contentType(APPLICATION_JSON)
-                        .content('{"name":"Sonni","age":42}')
+                        .content('{"name":"Sonni","age":32}')
                 );
 
-        then: "Sonni is created"
-        mongo.exists(query(where('name').is('Sonni')), Person.class) == true;
+        then: "Sonni is created with age 32"
+        mongo.exists(query(where('name').is('Sonni').and('age').is(32)), Person.class) == true;
 
         and: "respond with status ok"
         response.andExpect(status().isOk());
@@ -97,8 +101,4 @@ class IntegrationSpec extends Specification {
         and: "respond with status ok"
         response.andExpect(status().isOk());
     }
-
-    //TODO errors
-
-    //TODO Validation errors
 }
