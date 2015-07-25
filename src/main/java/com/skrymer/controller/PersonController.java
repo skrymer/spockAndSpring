@@ -17,8 +17,8 @@ public class PersonController {
 
     @RequestMapping(value = "person", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void create(@RequestBody Person person) {
-        personService.createPerson(person);
+    public Person create(@RequestBody Person person) {
+        return personService.createPerson(person);
     }
 
     @RequestMapping(value = "person/{name}", method = RequestMethod.GET)
@@ -27,9 +27,16 @@ public class PersonController {
         return personService.getPerson(name);
     }
 
+    @RequestMapping(value = "person", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@RequestBody Person person) {
+        personService.updatePerson(person);
+    }
+
     @RequestMapping(value = "person/{name}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable String name) {
         personService.deletePerson(name);
     }
 }
+

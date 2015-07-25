@@ -1,9 +1,12 @@
 package com.skrymer.model;
 
+import org.springframework.data.annotation.Id;
+
 /**
  * Created by skrymer on 18/07/15.
  */
 public class Person {
+    @Id
     private String name;
     private int age;
 

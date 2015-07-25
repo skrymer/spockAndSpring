@@ -3,9 +3,11 @@ package com.skrymer.service;
 import com.skrymer.model.Person;
 
 public interface PersonService {
-    void createPerson(Person person);
+    public Person createPerson(Person person);
 
-    Person getPerson(String name);
+    public Person getPerson(String name);
 
-    void deletePerson(String name);
+    public void deletePerson(String name);
+
+    public void updatePerson(Person person);
 }

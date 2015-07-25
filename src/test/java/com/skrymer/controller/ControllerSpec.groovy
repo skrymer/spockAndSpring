@@ -1,5 +1,6 @@
 package com.skrymer.controller
 
+import com.skrymer.model.Person
 import com.skrymer.service.PersonService
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -7,38 +8,39 @@ import spock.lang.Specification
 
 import static org.springframework.http.MediaType.APPLICATION_JSON
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
  * Controller specification
  */
 class ControllerSpec extends Specification {
-    PersonService measurementService
+    PersonService personService
     PersonController underTest
     MockMvc mockMvc
 
     def setup() {
-        measurementService = Mock(PersonService)
-        underTest = new PersonController(measurementService)
-        mockMvc = MockMvcBuilders.standaloneSetup(underTest).build()
+        personService = Mock(PersonService);
+        underTest = new PersonController(personService);
+        mockMvc = MockMvcBuilders.standaloneSetup(underTest)
+                .alwaysDo(print())
+                .build();
     }
 
-    def 'create a weight measurement'() {
-        def value = '100'
-        def tag = 'weight'
-        def dateTime = '2015-07-05T22:16:18'
+    def 'create a person named Sonni'() {
 
-        when:
-        def response = mockMvc.perform(post('/measurement')
+        when: "Creating a person named Sonni"
+        def response = mockMvc.perform(post('/person')
                 .contentType(APPLICATION_JSON)
-                .content("{\"value\": \"$value\", \"tag\": \"$tag\", \"dateTime\": \"$dateTime\"}")
+                .content('{"name":"Sonni", "age":42}')
         )
 
-        then:
-//        1 * measurementService.createMeasurement(
-//                { Measurement m -> m.value == value && m.tag == tag && m.dateTime == LocalDateTime.parse(dateTime) }
-//        )
+        then: "delegate to person service"
+        1 * personService.createPerson(
+                { Person p -> p.name == 'Sonni' && p.age == 32 }
+        )
 
+        and: "respond with 200"
         response
                 .andExpect(status().isOk());
     }
