@@ -42,14 +42,11 @@ class IntegrationSpec extends Specification {
     }
 
     def 'post'() {
-        given: "a person named Sonni"
-        def details = '{"name":"Sonni","age":42}';
-
-        when: "creating Sonni"
+        when: "creating a person named Sonni"
         def response =
                 mockMvc.perform(post('/person')
                         .contentType(APPLICATION_JSON)
-                        .content(details)
+                        .content('{"name":"Sonni","age":42}')
                 );
 
         then: "Sonni is created"
