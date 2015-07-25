@@ -79,7 +79,7 @@ class IntegrationSpec extends Specification {
         def response = mockMvc.perform(delete('/person/Sonni'));
 
         then: "Sonni is deleted"
-        mongo.exists(query(where('name').is('Sonni')), Person.class) == false
+        mongo.exists(query(where('name').is('Sonni')), Person.class) == false;
 
         and: "respond with status ok"
         response.andExpect(status().isOk());
@@ -95,7 +95,7 @@ class IntegrationSpec extends Specification {
                 .content('{"name":"Sonni", "age":42}'));
 
         then: "Sonni's age is updated to 42"
-        mongo.findOne(query(where('name').is('Sonni')), Person.class).age == 42
+        mongo.findOne(query(where('name').is('Sonni')), Person.class).age == 42;
 
         and: "respond with status ok"
         response.andExpect(status().isOk());
