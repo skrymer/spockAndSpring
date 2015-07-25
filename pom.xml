@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.skrymer</groupId>
-  <artifactId>rest-tests</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <artifactId>spock-rest-tests</artifactId>
+  <version>0-SNAPSHOT</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
