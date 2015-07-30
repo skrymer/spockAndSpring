@@ -3,6 +3,7 @@ package com.skrymer.model;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * Created by skrymer on 18/07/15.
@@ -11,6 +12,7 @@ public class Person {
     @Id
     private String name;
     @Max(120)
+    @Min(0)
     private int age;
 
     public Person() {
