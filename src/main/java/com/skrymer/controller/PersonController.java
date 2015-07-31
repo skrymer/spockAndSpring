@@ -4,6 +4,7 @@ import com.skrymer.model.Person;
 import com.skrymer.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -51,25 +52,50 @@ public class PersonController {
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
 
         return errors.stream()
-                .map(error -> new ValidationError(error.getCode(), error.getDefaultMessage()))
+                .map(error -> new ValidationError(((FieldError) error).getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException.class)
+    public Error handleRuntimeException(RuntimeException re) {
+        return new Error(re.getMessage());
+    }
+
     private static final class ValidationError {
-        private String property;
-        private String message;
+        private String field;
+        private String error;
 
         public ValidationError(String field, String message) {
-            this.property = field;
+            this.field = field;
+            this.error = message;
+        }
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+    }
+
+    private static final class Error {
+        private String message;
+
+        public Error() {
+        }
+
+        public Error(String message) {
             this.message = message;
-        }
-
-        public String getProperty() {
-            return property;
-        }
-
-        public void setProperty(String property) {
-            this.property = property;
         }
 
         public String getMessage() {

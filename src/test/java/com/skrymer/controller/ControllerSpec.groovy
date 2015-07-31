@@ -86,10 +86,45 @@ class ControllerSpec extends Specification {
         response.andExpect(status().isOk());
     }
 
-    // TODO TEST validation errors
+    def 'create person aged 121'() {
+        when: 'creating a person with age 121'
+        def response = mockMvc.perform(post('/person')
+                .contentType(APPLICATION_JSON)
+                .content('{"name":"Sonni", "age":121}')
+        );
 
-    // TODO TEST exception handling
+        then: 'return error message'
+        response.andExpect(jsonPath('$[0].field', equalToIgnoringCase('age')));
+        response.andExpect(jsonPath('$[0].error', equalToIgnoringCase('must be less than or equal to 120')));
 
+        and: 'respond with status 400'
+        response.andExpect(status().isBadRequest());
+    }
 
+    def 'create person aged -1'() {
+        when: 'creating a person with age -1'
+        def response = mockMvc.perform(post('/person')
+                .contentType(APPLICATION_JSON)
+                .content('{"name":"Sonni", "age":-1}')
+        );
 
+        then: 'return error message'
+        response.andExpect(jsonPath('$[0].field', equalToIgnoringCase('age')));
+        response.andExpect(jsonPath('$[0].error', equalToIgnoringCase('must be greater than or equal to 0')));
+
+        and: 'respond with status 400'
+        response.andExpect(status().isBadRequest());
+    }
+
+    def 'something explodes'() {
+        when: 'something explodes'
+        def response = mockMvc.perform(get('/person/sonni'));
+
+        then: 'return the exception message'
+        1 * personService.getPerson('sonni') >> { throw new RuntimeException('Something exploded') };
+        response.andExpect(jsonPath('$.message', equalToIgnoringCase('Something exploded')));
+
+        and: 'respond with status 500'
+        response.andExpect(status().isInternalServerError());
+    }
 }
