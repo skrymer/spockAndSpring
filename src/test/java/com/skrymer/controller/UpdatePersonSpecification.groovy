@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
- * Created by skrymer on 31/07/15.
+ * Update person specification
  */
 class UpdatePersonSpecification extends Specification {
     PersonService personService
