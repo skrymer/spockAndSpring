@@ -32,7 +32,6 @@ class IntegrationSpec extends Specification {
     WebApplicationContext wac
     @Autowired
     MongoTemplate mongo;
-
     MockMvc mockMvc
 
     def setup() {

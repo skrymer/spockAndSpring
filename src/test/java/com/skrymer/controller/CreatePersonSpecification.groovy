@@ -8,15 +8,15 @@ import spock.lang.Specification
 
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase
 import static org.springframework.http.MediaType.APPLICATION_JSON
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
- * Controller specification
+ * Create a person
  */
-class ControllerSpec extends Specification {
+class CreatePersonSpecification extends Specification {
     PersonService personService
     PersonController underTest
     MockMvc mockMvc
@@ -44,46 +44,6 @@ class ControllerSpec extends Specification {
         and: "respond with 200"
         response
                 .andExpect(status().isOk());
-    }
-
-    def 'get a person named Sonni'() {
-        when: 'getting a person named Sonni'
-        def response = mockMvc.perform(get('/person/sonni'));
-
-        then: 'delegate to personService'
-        1 * personService.getPerson('sonni') >> new Person('Sonni', 32);
-
-        and: 'return sonni'
-        response.andExpect(jsonPath('$.name', equalToIgnoringCase('sonni')));
-
-        and: 'respond with status 200'
-        response.andExpect(status().isOk());
-    }
-
-    def 'update a person named Sonni'() {
-        when: 'updating sonnis age to 42'
-        def response = mockMvc.perform(put('/person')
-                .contentType(APPLICATION_JSON)
-                .content('{"name":"Sonni", "age":42}'));
-
-        then: 'delegate to personService'
-        1 * personService.updatePerson(
-                { Person p -> p.name == 'Sonni' && p.age == 42 }
-        );
-
-        and: 'respond with status 200'
-        response.andExpect(status().isOk());
-    }
-
-    def 'delete a person named Sonni'() {
-        when: 'deleting sonni'
-        def response = mockMvc.perform(delete('/person/sonni'));
-
-        then: 'delegate deletion to personService'
-        1 * personService.deletePerson('sonni');
-
-        and: 'respond with status 200'
-        response.andExpect(status().isOk());
     }
 
     def 'create person aged 121'() {
@@ -114,17 +74,5 @@ class ControllerSpec extends Specification {
 
         and: 'respond with status 400'
         response.andExpect(status().isBadRequest());
-    }
-
-    def 'something explodes'() {
-        when: 'something explodes'
-        def response = mockMvc.perform(get('/person/sonni'));
-
-        then: 'return the exception message'
-        1 * personService.getPerson('sonni') >> { throw new RuntimeException('Something exploded') };
-        response.andExpect(jsonPath('$.message', equalToIgnoringCase('Something exploded')));
-
-        and: 'respond with status 500'
-        response.andExpect(status().isInternalServerError());
     }
 }
